@@ -13,7 +13,10 @@ export default function SignInPage() {
       <div className="space-y-4 w-80">
         <h1 className="text-xl font-semibold">Sign in</h1>
 
-        <Button className="w-full" onClick={() => signIn("github")}>
+        <Button
+          className="w-full"
+          onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+        >
           Sign in with GitHub
         </Button>
 
@@ -28,7 +31,12 @@ export default function SignInPage() {
         <Button
           variant="outline"
           className="w-full"
-          onClick={() => signIn("email", { email })}
+          onClick={() =>
+            signIn("email", {
+              email,
+              callbackUrl: "/dashboard",
+            })
+          }
         >
           Send magic link
         </Button>
