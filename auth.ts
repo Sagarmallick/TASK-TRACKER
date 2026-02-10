@@ -11,6 +11,11 @@ export const authOptions: NextAuthOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          redirect_uri: "http://localhost:3000/api/auth/callback/github",
+        },
+      },
     }),
     EmailProvider({
       server: {
@@ -21,7 +26,7 @@ export const authOptions: NextAuthOptions = {
           pass: process.env.RESEND_API_KEY!,
         },
       },
-      from: "Task Tracker <onboarding@resend.dev>",
+      from: "onboarding@resend.dev",
     }),
   ],
 
