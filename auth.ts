@@ -11,11 +11,6 @@ export const authOptions: NextAuthOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          redirect_uri: "http://localhost:3000/api/auth/callback/github",
-        },
-      },
     }),
     EmailProvider({
       server: {
@@ -32,7 +27,6 @@ export const authOptions: NextAuthOptions = {
 
   events: {
     async createUser({ user }) {
-      // 🔒 user is GUARANTEED to exist in DB here
       await prisma.project.create({
         data: {
           name: "My First Project",
@@ -44,6 +38,33 @@ export const authOptions: NextAuthOptions = {
           },
         },
       });
+    },
+
+    async signIn({ user }) {
+      if (!user.email) return;
+
+      const invites = await prisma.projectInvite.findMany({
+        where: {
+          email: user.email,
+          status: "PENDING",
+        },
+      });
+
+      for (const invite of invites) {
+        await prisma.$transaction([
+          prisma.projectMember.create({
+            data: {
+              projectId: invite.projectId,
+              userId: user.id,
+              role: invite.role,
+            },
+          }),
+          prisma.projectInvite.update({
+            where: { id: invite.id },
+            data: { status: "ACCEPTED" },
+          }),
+        ]);
+      }
     },
   },
 };
