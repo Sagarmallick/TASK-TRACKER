@@ -7,6 +7,10 @@ import clsx from "clsx";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { CreateProjectDialog } from "./CreateProjectDialog";
+import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
+import { useState } from "react";
+import { InviteMemberDialog } from "./invite-member-dialog";
 
 interface Project {
   id: string;
@@ -18,6 +22,8 @@ interface Props {
 }
 
 export function ProjectSidebarClient({ projects }: Props) {
+  const [inviteOpen, setInviteOpen] = useState(false);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -48,6 +54,16 @@ export function ProjectSidebarClient({ projects }: Props) {
       <div className="flex flex-col justify-between">
         <h2 className="font-semibold mb-4">TaskFlow</h2>
         <CreateProjectDialog />
+        <Separator />
+        {selectedProjectId && (
+          <Button
+            className="mt-4 bg-blue-400 hover:bg-blue-500"
+            size="sm"
+            onClick={() => setInviteOpen(true)}
+          >
+            Invite
+          </Button>
+        )}
       </div>
 
       <div className="mt-18">
@@ -66,6 +82,10 @@ export function ProjectSidebarClient({ projects }: Props) {
           </button>
         ))}
       </div>
+      <InviteMemberDialog
+        open={inviteOpen}
+        onClose={() => setInviteOpen(false)}
+      />
     </aside>
   );
 }

@@ -18,7 +18,7 @@ export function UserMenu({ name, image }: UserMenuProps) {
 
       <span className="text-sm font-medium">{name}</span>
 
-      <Button variant="ghost" size="sm" onClick={() => signOut()}>
+      <Button variant="destructive" size="sm" onClick={() => signOut()}>
         Logout
       </Button>
     </div>
