@@ -7,6 +7,7 @@ import { authOptions } from "@/auth";
 
 import { redirect } from "next/navigation";
 import { UserMenu } from "@/components/user-menu";
+import { ProjectMembers } from "@/components/project-members";
 
 interface DashboardPageProps {
   searchParams: {
@@ -47,9 +48,11 @@ export default async function DashboardPage({
 
   return (
     <div className="">
-      <div className="flex justify-between my-4">
+      <div className="flex justify-between items-start my-4">
+        {projectId && <ProjectMembers projectId={projectId} />}
         <UserMenu name={session.user.name} image={session.user.image} />
       </div>
+
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Tasks</h1>
